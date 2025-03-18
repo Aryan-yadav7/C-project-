@@ -22,3 +22,92 @@ This system will allow users to:
 - A linked list to store open files to simulate file handling.
 ### 4. Use of Trees
 - A Tree-based structure to represent directories and subdirectories.
+- Each directory node contains linked lists of files and subdirectories.
+## Functionalities
+### 1. File Management Module
+- Create a new file (touch filename).
+- Delete a file (rm filename).
+- Rename a file (mv oldname newname).
+- Open and write content to a file (open filename, write filename).
+- Read a file's content (read filename).
+- Display file metadata (size, type, creation date).
+### 2. Directory Management Module
+- Create a new directory (mkdir dirname).
+- Delete a directory (recursively remove all contents) (rmdir dirname).
+- Navigate to a directory (cd dirname).
+- List contents of the current directory (ls).
+- Display current path (pwd).
+### 3. Search & Navigation Module
+- Search for a file in the system (find filename).
+- Display current directory path (pwd).
+- Traverse the directory tree to list all files (tree).
+## Code Outline
+### 1. Defining Structures
+```cpp
+struct File {
+ string name;
+ string content;
+ int size;
+ File* next;
+};
+
+struct Directory {
+
+ string name;
+
+ vector<File*> files;
+
+ vector<Directory*> subDirs;
+
+ Directory* parent;
+
+};
+
+```
+
+### 2. Creating a Directory
+
+```cpp
+
+void mkdir(string dirName) {
+
+ Directory* newDir = new Directory{dirName, {}, {}, currentDir};
+
+ currentDir->subDirs.push_back(newDir);
+
+ cout << "Directory '" << dirName << "' created.\n";
+
+}
+
+```
+
+### 3. Navigating Between Directories
+
+```cpp
+
+void cd(string dirName) {
+
+ if (dirName == ".." && currentDir->parent != nullptr) {
+
+ currentDir = currentDir->parent;
+
+ return;
+
+ }
+
+ for (auto dir : currentDir->subDirs) {
+
+ if (dir->name == dirName) {
+
+ currentDir = dir;
+
+ return;
+
+ }
+
+ }
+
+ cout << "Directory not found!\n";
+}
+```
+
